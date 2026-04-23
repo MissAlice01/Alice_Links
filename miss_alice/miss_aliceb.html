@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Miss Alice'B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --pink:   #f472b6;
+      --rose:   #e879a0;
+      --purple: #a855f7;
+      --lavender: #c084fc;
+      --dark:   #0d0010;
+      --card:   rgba(255,255,255,0.07);
+      --border: rgba(244,114,182,0.25);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 16px 64px;
+      overflow-x: hidden;
+    }
+
+    /* ── animated mesh background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(168,85,247,.35) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(244,114,182,.30) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(232,121,160,.12) 0%, transparent 70%);
+      z-index: 0;
+      animation: meshShift 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshShift {
+      from { opacity: 1; transform: scale(1); }
+      to   { opacity: .85; transform: scale(1.04); }
+    }
+
+    /* soft noise grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .6;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ── avatar ── */
+    .avatar-wrap {
+      position: relative;
+      margin-bottom: 20px;
+      animation: floatIn .8s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(-24px) scale(.9); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .avatar-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--pink), var(--purple), var(--rose));
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a0028;
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    /* ── name + tagline ── */
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .01em;
+      text-align: center;
+      animation: fadeUp .7s .2s both;
+    }
+
+    .profile-handle {
+      font-size: .85rem;
+      font-weight: 300;
+      color: var(--lavender);
+      margin-top: 4px;
+      letter-spacing: .08em;
+      text-align: center;
+      animation: fadeUp .7s .3s both;
+    }
+
+    .divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      border-radius: 2px;
+      margin: 18px auto 28px;
+      animation: fadeUp .7s .4s both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── link buttons ── */
+    .links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: #fff;
+      text-decoration: none;
+      font-size: .95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      animation: fadeUp .6s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(244,114,182,.15), rgba(168,85,247,.10));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .link-btn:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 8px 32px rgba(244,114,182,.25); }
+    .link-btn:hover::before { opacity: 1; }
+    .link-btn:active { transform: scale(.98); }
+
+    .link-btn:nth-child(1) { animation-delay: .5s; }
+    .link-btn:nth-child(2) { animation-delay: .62s; }
+    .link-btn:nth-child(3) { animation-delay: .74s; }
+
+    .link-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .icon-tiktok  { background: linear-gradient(135deg,#010101,#69c9d0); }
+    .icon-insta   { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .icon-secret  { background: linear-gradient(135deg, var(--rose), var(--purple)); }
+
+    .link-label { flex: 1; }
+    .link-arrow { opacity: .5; font-size: .8rem; }
+
+    /* ── footer ── */
+    .footer {
+      margin-top: 40px;
+      font-size: .72rem;
+      color: rgba(255,255,255,.2);
+      letter-spacing: .06em;
+      text-align: center;
+      animation: fadeUp .7s 1s both;
+    }
+
+    #emoji-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="emoji-canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('emoji-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const EMOJIS = ['🍑','🍆'];
+    const COLS = 6;
+    const SIZE = 36;
+    const ROW_GAP = 70;
+    const COL_GAP = 70;
+    const SPEED = 0.5; // px per frame upward
+
+    let W, H, ROWS, grid;
+
+    function buildGrid() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+
+      // enough rows to fill screen + 1 extra set for seamless loop
+      ROWS = Math.ceil(H / ROW_GAP) + 4;
+
+      grid = [];
+      for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+          grid.push({
+            emoji: EMOJIS[(c + r) % 2],
+            col: c,
+            row: r,
+          });
+        }
+      }
+    }
+
+    buildGrid();
+    window.addEventListener('resize', buildGrid);
+
+    const totalH = ROWS * ROW_GAP;
+    let offset = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.font = `${SIZE}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const xPad = (W - (COLS - 1) * COL_GAP) / 2;
+
+      for (const p of grid) {
+        const x = xPad + p.col * COL_GAP;
+        // base Y from bottom upward, offset shifts everything up
+        let y = H + ROW_GAP - (p.row * ROW_GAP) - offset;
+        // wrap: when row goes above screen bring it back below
+        y = ((y % totalH) + totalH) % totalH - ROW_GAP;
+        if (y < -ROW_GAP || y > H + ROW_GAP) continue;
+        ctx.fillText(p.emoji, x, y);
+      }
+
+      offset = (offset + SPEED) % totalH;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+
+  <div class="container">
+
+    <!-- Avatar -->
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="imagens/perfil.jpg" alt="Miss Alice'B">
+        </div>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <h1 class="profile-name">Miss Alice'B</h1>
+    <p class="profile-handle">@miss_aliceb</p>
+
+    <div class="divider"></div>
+
+    <!-- Links -->
+    <div class="links">
+
+      <a href="https://www.tiktok.com/@alice_brty" target="_blank" class="link-btn">
+        <div class="link-icon icon-tiktok">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.19 8.19 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg>
+        </div>
+        <span class="link-label">TikTok 🖤</span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a href="https://www.instagram.com/miss_aliceb01" target="_blank" class="link-btn">
+        <div class="link-icon icon-insta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </div>
+        <span class="link-label">Instagram 🧡</span>
+        <span class="link-arrow">›</span>
+      </a>
+
+      <a href="https://typebot.co/tema-whatsapp-66ayhyr" target="_blank" class="link-btn">
+        <div class="link-icon icon-secret">🔒</div>
+        <span class="link-label">Meu Mundo Secreto 🔒</span>
+        <span class="link-arrow">›</span>
+      </a>
+
+    </div>
+
+    <p class="footer">© 2026 Miss Alice'B · todos os direitos reservados</p>
+
+  </div>
+</body>
+</html>
